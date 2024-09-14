@@ -26,7 +26,7 @@ const App: React.FC = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [rows] = useState(12); // Removed setRows, keeping rows as read-only state
+  const [rows] = useState(12);
   const [customRowCount, setCustomRowCount] = useState(0);
   const [floatingBoxVisible, setFloatingBoxVisible] = useState(false);
 
