@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DataTable, DataTableSelectionChangeEvent } from 'primereact/datatable';
+import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Checkbox } from 'primereact/checkbox';
 import { InputNumber } from 'primereact/inputnumber';
@@ -26,7 +26,7 @@ const App: React.FC = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [rows, setRows] = useState(12);
+  const [rows] = useState(12); // Removed setRows, keeping rows as read-only state
   const [customRowCount, setCustomRowCount] = useState(0);
   const [floatingBoxVisible, setFloatingBoxVisible] = useState(false);
 
@@ -37,8 +37,7 @@ const App: React.FC = () => {
       const fetchedArtworks = response.data.data;
       const totalRecords = response.data.pagination.total;
 
-      
-      const currentPageSelection = fetchedArtworks.filter(artwork => 
+      const currentPageSelection = fetchedArtworks.filter((artwork: Artwork) =>
         globalSelectedArtworks.some(selected => selected.id === artwork.id)
       );
       setArtworks(fetchedArtworks);
@@ -59,7 +58,7 @@ const App: React.FC = () => {
     setPage(event.page + 1); // PrimeReact uses zero-based page indexing
   };
 
-  const onRowSelectChange = (e: DataTableSelectionChangeEvent) => {
+  const onRowSelectChange = (e: any) => {
     const newPageSelection = e.value;
     const updatedGlobalSelections = globalSelectedArtworks
       .filter(selected => !artworks.some(artwork => artwork.id === selected.id))
@@ -102,7 +101,7 @@ const App: React.FC = () => {
 
     await fetchArtworks(page, rows);
 
-    const updatedPageSelections = artworks.filter(artwork => 
+    const updatedPageSelections = artworks.filter(artwork =>
       updatedGlobalSelections.some(selected => selected.id === artwork.id)
     );
 
@@ -115,9 +114,9 @@ const App: React.FC = () => {
     setCurrentPageSelections([]);
   };
 
-  const rowNumberTemplate = (rowData: Artwork, options: { rowIndex: number }) => {
-    return (page - 1) * rows + options.rowIndex + 1;
-  };
+  // const rowNumberTemplate = (options: { rowIndex: number }) => {
+  //   return (page - 1) * rows + options.rowIndex + 1; // Removed rowData since it's not used
+  // };
 
   return (
     <div className="App">
@@ -158,11 +157,11 @@ const App: React.FC = () => {
           </div>
         }
       >
-        <Column
+        {/* <Column
           field="count"
           header="Row Number"
-          body={rowNumberTemplate}
-        />
+          body={rowNumberTemplate} // Now only passing options, not rowData
+        /> */}
         <Column selectionMode="multiple" headerStyle={{ width: '3em' }}></Column>
         <Column field="title" header="Title"></Column>
         <Column field="place_of_origin" header="Origin"></Column>
